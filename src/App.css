@@ -1,0 +1,66 @@
+@import '../node_modules/antd/dist/antd.css';
+
+.App {
+    padding: 0 42px;
+    padding-top: 42px;
+}
+
+.tabs {
+    display: flex;
+    overflow-x: auto;
+    width     : 100%;
+    background-color: #1890ff;
+}
+
+.tab {
+    cursor      : pointer;
+    display     : inline-block;
+    color: white;
+    padding     : 6px 24px;
+}
+
+.activeTab {
+    background-color: white;
+    color: black;
+    font-weight: bold;
+}
+
+.content {
+    position: relative;
+    top     : 60px;
+    overflow: auto;
+    width   : 100%;
+    height  : calc(100vh - 160px);
+    box-shadow: 2px 4px 8px rgb(0 0 0 / 20%);
+}
+
+th, td {
+    text-align: center !important;
+}
+
+.insert {
+    position: fixed;
+    top: 97px;
+    right: 42px;
+}
+
+.ant-pagination {
+    z-index  : 1000;
+    position : fixed;
+    top      : 80px;
+    left     : 42px;
+}
+
+input {
+    border-radius: 7px;
+    border-color: azure;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgb(197, 188, 188);
+}
