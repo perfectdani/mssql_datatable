@@ -252,15 +252,15 @@ const Content = (props) => {
                             {
                                 elm.Id == editId ?
                                     <Space>
-                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<CheckOutlined />} onClick={updateRow}/>
-                                        <Button danger type="text" size="small" icon={<CloseOutlined />} onClick={updateCancel}/>
+                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<CheckOutlined />} onClick={updateRow} />
+                                        <Button danger type="text" size="small" icon={<CloseOutlined />} onClick={updateCancel} />
                                     </Space>
                                     : <Space>
-                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<EditOutlined />} onClick={()=>{editRow(elm.Id)}}/>
+                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<EditOutlined />} onClick={() => { editRow(elm.Id) }} />
                                         <Popconfirm
                                             placement="left"
                                             title="Are you deleting this row?"
-                                            onConfirm={()=>{deleteRow(elm.Id,content)}}
+                                            onConfirm={() => { deleteRow(elm.Id, content) }}
                                             okText="Yes"
                                             cancelText="No"
                                         >
@@ -270,8 +270,8 @@ const Content = (props) => {
                             }
                         </Space>
                         : <Space>
-                            <Button type="text" size="small" style={{ color: 'green' }} icon={<CheckOutlined />} onClick={createRow}/>
-                            <Button danger type="text" size="small" icon={<CloseOutlined />} onClick={createCancel}/>
+                            <Button type="text" size="small" style={{ color: 'green' }} icon={<CheckOutlined />} onClick={createRow} />
+                            <Button danger type="text" size="small" icon={<CloseOutlined />} onClick={createCancel} />
                         </Space>
                 ),
                 /* eslint-enable */
@@ -282,7 +282,10 @@ const Content = (props) => {
 
     return (
         <div className="content">
-            <Button type="primary" className="insert" disabled={insertFlag} onClick={insertRow} icon={<PlusOutlined />}>New</Button>
+            {
+                props.nowTab &&
+                <Button type="primary" className="insert" disabled={insertFlag} onClick={insertRow} icon={<PlusOutlined />}>New</Button>
+            }
             <Table
                 bordered
                 rowKey="Id"
