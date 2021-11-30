@@ -15,9 +15,19 @@ const Content = (props) => {
         current: 1,
         pageSize: 10,
     });
-
+    const [filteredInfo, setFilteredInfo] = React.useState({});
+    const [sortedInfo, setSortedInfo] = React.useState({});
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
+
+    const allReset = () => {
+        setPagenation({ ...pagination, current: 1 });
+        setFilteredInfo({});
+        setSearchText('')
+        setSortedInfo({});
+        setInsertFlag(false);
+        setEditId(null);
+    }
 
     const getContent = () => {
         fetch(`${process.env.REACT_APP_API}/getContent`, {
@@ -38,7 +48,7 @@ const Content = (props) => {
     }
 
     const insertRow = () => {
-        setPagenation({ ...pagination, current: 1 });
+        allReset();
         setContent([header, ...content]);
         setInsertFlag(true);
     }
@@ -126,9 +136,13 @@ const Content = (props) => {
     };
 
 
-    const handleTableChange = (params) => {
-        setPagenation(params.pagination);
+    const handleTableChange = (pagination, filters, sorter) => {
+        setPagenation(pagination);
+        setFilteredInfo(filters);
+        setSortedInfo(sorter);
     };
+
+
 
     const antdTableSorter = (a, b, key) => {
         if (typeof a[key] === 'number' && typeof b[key] === 'number') {
@@ -147,9 +161,6 @@ const Content = (props) => {
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
             <div style={{ padding: 8 }}>
                 <Input
-                    // ref={node => {
-                    //     searchInput = node;
-                    // }}
                     placeholder={`Search ${dataIndex}`}
                     value={selectedKeys[0]}
                     onChange={e => setSelectedKeys(e.target.value ? [e.target.value] : [])}
@@ -188,12 +199,6 @@ const Content = (props) => {
             record[dataIndex]
                 ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
                 : '',
-        // onFilterDropdownVisibleChange: visible => {
-        //     if (visible) {
-        //         setTimeout(() => searchInput.select(), 100);
-        //     }
-        // },
-        /* eslint-disable */
         render: (_, elm) => (
             elm.Id ?
                 elm.Id == editId ?
@@ -215,6 +220,7 @@ const Content = (props) => {
 
     React.useEffect(() => {
         if (props.nowTab) {
+            allReset();
             getContent();
         }
     }, [props.nowTab,]);
@@ -227,7 +233,10 @@ const Content = (props) => {
                     arr = [...arr, {
                         title: key,
                         dataIndex: key,
+                        key: key,
+                        filteredValue: filteredInfo[key] || null,
                         sorter: (a, b) => antdTableSorter(a, b, key),
+                        sortOrder: sortedInfo?.columnKey === key && sortedInfo?.order,
                         ...getColumnSearchProps(key)
                     }];
                 }
@@ -269,7 +278,7 @@ const Content = (props) => {
             }];
             setColumns(arr);
         }
-    }, [content, editId]);
+    }, [content, sortedInfo, filteredInfo, editId]);
 
     return (
         <div className="content">
