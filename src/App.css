@@ -25,13 +25,8 @@
     font-weight: bold;
 }
 
-.content {
-    position: relative;
-    top     : 60px;
-    overflow: auto;
-    width   : 100%;
-    height  : calc(100vh - 160px);
-    box-shadow: 2px 4px 8px rgb(0 0 0 / 20%);
+.ant-table {
+    box-shadow: 2px 4px 8px rgb(0 0 0 20%);
 }
 
 th, td {
@@ -41,19 +36,7 @@ th, td {
 .insert {
     position: fixed;
     top: 97px;
-    right: 42px;
-}
-
-.ant-pagination {
-    z-index  : 1000;
-    position : fixed;
-    top      : 80px;
-    left     : 42px;
-}
-
-input {
-    border-radius: 7px;
-    border-color: azure;
+    right: 84px;
 }
 
 ::-webkit-scrollbar {

@@ -6,6 +6,8 @@ import { SearchOutlined, EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlin
 
 const Content = (props) => {
 
+    const [tableWidth, setTableWidth] = React.useState(null);
+    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight-230);
     const [insertFlag, setInsertFlag] = React.useState(false);
     const [editId, setEditId] = React.useState(null);
     const [content, setContent] = React.useState(null);
@@ -14,6 +16,7 @@ const Content = (props) => {
     const [pagination, setPagenation] = React.useState({
         current: 1,
         pageSize: 10,
+        position: ['topLeft', 'none']
     });
     const [filteredInfo, setFilteredInfo] = React.useState({});
     const [sortedInfo, setSortedInfo] = React.useState({});
@@ -135,20 +138,16 @@ const Content = (props) => {
         setSearchText('');
     };
 
-
     const handleTableChange = (pagination, filters, sorter) => {
         setPagenation(pagination);
         setFilteredInfo(filters);
         setSortedInfo(sorter);
     };
 
-
-
-    const antdTableSorter = (a, b, key) => {
+    const tableSorter = (a, b, key) => {
         if (typeof a[key] === 'number' && typeof b[key] === 'number') {
             return a[key] - b[key];
         }
-
         if (typeof a[key] === 'string' && typeof b[key] === 'string') {
             a = a[key].toLowerCase();
             b = b[key].toLowerCase();
@@ -235,7 +234,7 @@ const Content = (props) => {
                         dataIndex: key,
                         key: key,
                         filteredValue: filteredInfo[key] || null,
-                        sorter: (a, b) => antdTableSorter(a, b, key),
+                        sorter: (a, b) => tableSorter(a, b, key),
                         sortOrder: sortedInfo?.columnKey === key && sortedInfo?.order,
                         ...getColumnSearchProps(key)
                     }];
@@ -277,11 +276,18 @@ const Content = (props) => {
                 /* eslint-enable */
             }];
             setColumns(arr);
+            setTableWidth(arr.length*150);
         }
     }, [content, sortedInfo, filteredInfo, editId]);
+    
+    const handleResize = () => {
+        setTableHeight(window.innerHeight-230);
+    }
+    
+    window.addEventListener("resize", handleResize);
 
     return (
-        <div className="content">
+        <React.Fragment>
             {
                 props.nowTab &&
                 <Button type="primary" className="insert" disabled={insertFlag} onClick={insertRow} icon={<PlusOutlined />}>New</Button>
@@ -293,10 +299,10 @@ const Content = (props) => {
                 dataSource={content}
                 pagination={pagination}
                 onChange={handleTableChange}
+                scroll={{ x: tableWidth, y: talbleHeight }}
             />
-        </div>
+        </React.Fragment>
     );
-
 };
 
 export default Content;
