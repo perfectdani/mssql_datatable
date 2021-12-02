@@ -37,6 +37,7 @@ th, td {
     position: fixed;
     top: 97px;
     right: 84px;
+    z-index: 100;
 }
 
 ::-webkit-scrollbar {
