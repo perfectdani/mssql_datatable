@@ -1,20 +1,26 @@
 import React from 'react';
-import Tab from './component/tab.js';
-import Content from './component/content.js';
-import './App.css';
+import { Router, Switch, Route } from 'react-router-dom';
+import { createBrowserHistory, createHashHistory } from 'history';
+import { isElectron } from './utils';
+import Home from './component/home';
+import Login from './component/login';
 
 function App() {
 
-    const [nowTab, setNowTab] = React.useState(null);
-
-    const handleTab = (tab) => {
-        setNowTab(tab);
-    }
+    const history = isElectron() ? createHashHistory() : createBrowserHistory();
 
     return (
         <div className="App">
-            <Tab handleTab={handleTab} nowTab={nowTab} />
-            <Content nowTab={nowTab} />
+            <Router history={history}>
+                <Switch>
+                    <Route path='/' exact>
+                        <Home />
+                    </Route>
+                    <Route path='/login' exact>
+                        <Login />
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     );
 }

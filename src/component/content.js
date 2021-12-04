@@ -1,18 +1,19 @@
-import React from "react";
+import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { Table, Space, Popconfirm, Button, Input } from 'antd';
-import { blue } from '@ant-design/colors';
 import { SearchOutlined, EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { blue } from '@ant-design/colors';
 
 const Content = (props) => {
 
     const [tableWidth, setTableWidth] = React.useState(null);
-    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight-230);
+    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight-313);
     const [insertFlag, setInsertFlag] = React.useState(false);
     const [editId, setEditId] = React.useState(null);
     const [content, setContent] = React.useState(null);
     const [header, setHeader] = React.useState(null);
     const [columns, setColumns] = React.useState(null);
+    const [isLoading, setIsLoading] = React.useState(false);
     const [pagination, setPagenation] = React.useState({
         current: 1,
         pageSize: 10,
@@ -33,6 +34,7 @@ const Content = (props) => {
     }
 
     const getContent = () => {
+        setIsLoading(true);
         fetch(`${process.env.REACT_APP_API}/getContent`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -47,6 +49,7 @@ const Content = (props) => {
             }
             arr['Id'] = 0;
             setHeader(arr);
+            setIsLoading(false);
         });
     }
 
@@ -200,7 +203,7 @@ const Content = (props) => {
                 : '',
         render: (_, elm) => (
             elm.Id ?
-                elm.Id == editId ?
+                elm.Id === editId ?
                     <Input type="text" name={dataIndex} defaultValue={elm[dataIndex]} style={{ textAlign: 'center' }} />
                     : searchedColumn === dataIndex ? (
                         <Highlighter
@@ -222,7 +225,7 @@ const Content = (props) => {
             allReset();
             getContent();
         }
-    }, [props.nowTab,]);
+    }, [props.nowTab]);
 
     React.useEffect(() => {
         if (content) {
@@ -281,7 +284,7 @@ const Content = (props) => {
     }, [content, sortedInfo, filteredInfo, editId]);
     
     const handleResize = () => {
-        setTableHeight(window.innerHeight-230);
+        setTableHeight(window.innerHeight-313);
     }
     
     window.addEventListener("resize", handleResize);
@@ -297,6 +300,7 @@ const Content = (props) => {
                 rowKey="Id"
                 columns={columns}
                 dataSource={content}
+                loading={isLoading}
                 pagination={pagination}
                 onChange={handleTableChange}
                 scroll={{ x: tableWidth, y: talbleHeight }}
