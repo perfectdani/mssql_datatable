@@ -41,8 +41,27 @@ body {
     margin: 0 !important;
 }
 
+.login-container {
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container * {
+    box-sizing: revert;
+}
+
+.login-container h1 {
+    color: white;
+}
+
+.login-container input, button {
+    line-height: 1.1;
+}
+
 .app {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
@@ -52,15 +71,7 @@ body {
     background-repeat: no-repeat;
     background-size: cover;
 }
-.app * {
-    box-sizing: revert;
-}
-.app h1 {
-    color: white;
-}
-.app input, button {
-    line-height: 1.1;
-}
+
 .form-block-wrapper {
     position: fixed;
     top: 0;
@@ -79,8 +90,8 @@ body {
 }
 
 .form-block {
+    overflow: hidden;
     position: relative;
-    margin: 100px auto 0;
     width: 285px;
     padding: 25px;
     background: rgba(255, 255, 255, .13);

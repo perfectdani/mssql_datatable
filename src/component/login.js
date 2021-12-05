@@ -16,7 +16,7 @@ class LoginComponent extends React.Component {
     }
     toggleMode() {
         var newMode = this.state.mode === 'login' ? 'signup' : 'login';
-        this.setState({ mode: newMode});
+        this.setState({ mode: newMode });
     }
     onFinish(e) {
         e.preventDefault();
@@ -33,13 +33,14 @@ class LoginComponent extends React.Component {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ username: username, password: password })
                 }).then(res => res.json()).then((result) => {
-                    if(result.message === 'Log In Success') {
+                    if (result.message === 'Log In Success') {
                         notification.info({
                             message: result.message,
                             description: result.description,
                             placement: 'topRight'
                         });
                         localStorage.setItem("user", username);
+                        localStorage.setItem("admin", result.admin);
                         history.push("/");
                         let pathUrl = window.location.href;
                         window.location.href = pathUrl;
@@ -51,13 +52,13 @@ class LoginComponent extends React.Component {
                         });
                     }
                 },
-                (error) => {
-                    notification.warning({
-                        message: 'Log In Error',
-                        description: 'Server has got any problem.',
-                        placement: 'topRight'
+                    (error) => {
+                        notification.warning({
+                            message: 'Log In Error',
+                            description: 'Server has got some problems.',
+                            placement: 'topRight'
+                        });
                     });
-                });
             } else {
                 notification.warning({
                     message: 'Input Error',
@@ -66,7 +67,7 @@ class LoginComponent extends React.Component {
                 });
             }
         } else {
-            if (fullname && email && createpassword && createpassword === repeatpassword ) {
+            if (fullname && email && createpassword && createpassword === repeatpassword) {
                 fetch(`${process.env.REACT_APP_API}/signup`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -76,7 +77,7 @@ class LoginComponent extends React.Component {
                         createpassword: createpassword
                     })
                 }).then(res => res.json()).then((result) => {
-                    if(result.message === 'Sign Up Success') {
+                    if (result.message === 'Sign Up Success') {
                         notification.info({
                             message: result.message,
                             description: result.description,
@@ -94,17 +95,17 @@ class LoginComponent extends React.Component {
                         });
                     }
                 },
-                (error) => {
-                    notification.warning({
-                        message: 'Sign Up Error',
-                        description: 'Server has got any problem.',
-                        placement: 'topRight'
+                    (error) => {
+                        notification.warning({
+                            message: 'Sign Up Error',
+                            description: 'Server has got some problem.',
+                            placement: 'topRight'
+                        });
                     });
-                });
             } else {
                 notification.warning({
                     message: 'Input Error',
-                    description: createpassword !== repeatpassword ? 'Please confirm password.' : 'All field are required.',
+                    description: createpassword !== repeatpassword ? 'Please confirm the password.' : 'All fields are required.',
                     placement: 'topRight'
                 })
             }
@@ -112,7 +113,7 @@ class LoginComponent extends React.Component {
     }
     render() {
         return (
-            <div>
+            <React.Fragment>
                 <div className={`form-block-wrapper form-block-wrapper--is-${this.state.mode}`} ></div>
                 <section className={`form-block form-block--is-${this.state.mode}`}>
                     <header className="form-block__header">
@@ -125,39 +126,39 @@ class LoginComponent extends React.Component {
                     </header>
                     <LoginForm mode={this.state.mode} onSubmit={this.onFinish.bind(this)} />
                 </section>
-            </div>
+            </React.Fragment>
         )
     }
 }
 
 class LoginForm extends React.Component {
     // eslint-disable-next-line no-useless-constructor
-    constructor (props) {
+    constructor(props) {
         super(props);
     }
     render() {
         return (
-        <form onSubmit={this.props.onSubmit}>
-            <div className="form-block__input-wrapper">
-                <div className="form-group form-group--login">
-                    <Input type="text" id="username" label="user name" disabled={this.props.mode === 'signup'}/>
-                    <Input type="password" id="password" label="password" disabled={this.props.mode === 'signup'}/>
+            <form onSubmit={this.props.onSubmit}>
+                <div className="form-block__input-wrapper">
+                    <div className="form-group form-group--login">
+                        <Input type="text" id="username" label="user name" disabled={this.props.mode === 'signup'} />
+                        <Input type="password" id="password" label="password" disabled={this.props.mode === 'signup'} />
+                    </div>
+                    <div className="form-group form-group--signup">
+                        <Input type="text" id="fullname" label="full name" disabled={this.props.mode === 'login'} />
+                        <Input type="email" id="email" label="email" disabled={this.props.mode === 'login'} />
+                        <Input type="password" id="createpassword" label="password" disabled={this.props.mode === 'login'} />
+                        <Input type="password" id="repeatpassword" label="repeat password" disabled={this.props.mode === 'login'} />
+                    </div>
                 </div>
-                <div className="form-group form-group--signup">
-                    <Input type="text" id="fullname" label="full name" disabled={this.props.mode === 'login'} />
-                    <Input type="email" id="email" label="email" disabled={this.props.mode === 'login'} />
-                    <Input type="password" id="createpassword" label="password" disabled={this.props.mode === 'login'} />
-                    <Input type="password" id="repeatpassword" label="repeat password" disabled={this.props.mode === 'login'} />
-                </div>
-            </div>
-            <button className="button button--primary full-width" type="submit">{this.props.mode === 'login' ? 'Log In' : 'Sign Up'}</button>
-        </form>
+                <button className="button button--primary full-width" type="submit">{this.props.mode === 'login' ? 'Log In' : 'Sign Up'}</button>
+            </form>
         )
     }
 }
 
 const Input = ({ id, type, label, disabled }) => (
-    <input className="form-group__input" type={type} id={id} placeholder={label} disabled={disabled}/>
+    <input className="form-group__input" type={type} id={id} placeholder={label} disabled={disabled} />
 );
 
 const Login = () => {
@@ -167,11 +168,12 @@ const Login = () => {
             history.push("/");
             let pathUrl = window.location.href;
             window.location.href = pathUrl;
-        }        
+        }
     }, []);
 
     return (
-        <div className={`app app--is-${mode}`}>
+        <div className="login-container">
+            <div className="app" />
             <LoginComponent mode={mode} />
         </div>
     )

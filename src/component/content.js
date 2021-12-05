@@ -70,7 +70,11 @@ const Content = (props) => {
         fetch(`${process.env.REACT_APP_API}/createRow`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ table: props.nowTab, data })
+            body: JSON.stringify({
+                user: localStorage.getItem('user'),
+                table: props.nowTab,
+                data: data
+            })
         }).then(res => res.json()).then((result) => {
             if (result.message === 'Success') {
                 getContent();
@@ -94,7 +98,11 @@ const Content = (props) => {
         fetch(`${process.env.REACT_APP_API}/deleteRow`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ table: props.nowTab, id })
+            body: JSON.stringify({
+                user: localStorage.getItem('user'),
+                table: props.nowTab,
+                id: id
+            })
         }).then(res => res.json()).then((result) => {
             if (result.message === 'Success') {
                 getContent();
@@ -117,7 +125,12 @@ const Content = (props) => {
         fetch(`${process.env.REACT_APP_API}/updateRow`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ table: props.nowTab, editId, data })
+            body: JSON.stringify({
+                user: localStorage.getItem('user'),
+                table: props.nowTab,
+                editId: editId,
+                data: data
+            })
         }).then(res => res.json()).then((result) => {
             if (result.message === 'Success') {
                 getContent();
@@ -247,6 +260,7 @@ const Content = (props) => {
                 title: 'Actions',
                 dataIndex: 'actions',
                 fixed: 'right',
+                width: 100,
                 /* eslint-disable */
                 render: (_, elm) => (
                     elm.Id ?

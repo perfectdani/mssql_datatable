@@ -1,5 +1,9 @@
 @import '../../node_modules/antd/dist/antd.css';
 
+body {
+    background-color: #efefef;
+}
+
 .App {
     padding    : 0 42px;
 }
@@ -38,24 +42,30 @@
     font-weight     : bold;
 }
 
-.ant-table {
+.ant-table-wrapper {
+    background-color: white;
     box-shadow: 2px 4px 8px rgb(0 0 0 20%);
 }
 
-th, td {
-    text-align: center !important;
+.ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+    background-color: #dfdfdf;
+  }
+
+.ant-pagination {
+    padding-left: 42px;
 }
 
 .insert {
     position: fixed;
-    top     : 180px;
+    top     : 186px;
     right   : 84px;
     z-index : 100;
 }
 
 ::-webkit-scrollbar {
     width : 5px;
-    height: 5px;
+    height: 10px;
+    background-color: white;
 }
 
 ::-webkit-scrollbar-thumb {
