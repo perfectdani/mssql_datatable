@@ -5,20 +5,20 @@ body {
 }
 
 .App {
-    padding    : 0 42px;
+    padding: 0 42px;
 }
 
 .header {
-    display: flex;
+    display        : flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 12px 42px;
+    align-items    : center;
+    padding        : 12px 42px;
 }
 
 .header-text {
-    color: #1890ff;
-    font-weight: bold;
-    font-size: 24px;
+    color        : #1890ff;
+    font-weight  : bold;
+    font-size    : 24px;
     margin-bottom: 0;
 }
 
@@ -44,12 +44,16 @@ body {
 
 .ant-table-wrapper {
     background-color: white;
-    box-shadow: 2px 4px 8px rgb(0 0 0 20%);
+    box-shadow      : 2px 4px 8px rgb(0 0 0 20%);
 }
 
-.ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+.ant-table-tbody>tr.ant-table-row-level-0:hover>td {
     background-color: #dfdfdf;
-  }
+}
+
+.row-input {
+    border-color: #1890ff;
+}
 
 .ant-pagination {
     padding-left: 42px;
@@ -63,8 +67,8 @@ body {
 }
 
 ::-webkit-scrollbar {
-    width : 5px;
-    height: 10px;
+    width           : 5px;
+    height          : 10px;
     background-color: white;
 }
 

@@ -16,9 +16,11 @@ function LogContent() {
 
     React.useEffect(() => {
         setIsLoading(true);
-        fetch(`${process.env.REACT_APP_API}/getLogs`).then(res => res.json()).then((result) => {
-            setLogData(result.data);
-            setIsLoading(false);
+        fetch(`${process.env.REACT_APP_API}/view-log`).then(res => res.json()).then((result) => {
+            if (result.message === 'success') {
+                setLogData(result.data);
+                setIsLoading(false);
+            }
         });
     }, []);
 
@@ -68,13 +70,13 @@ function LogContent() {
         {
             title: 'Log Time',
             dataIndex: 'logTime',
-            width: '10%',
+            width: '15%',
             ...getColumnSearchProps('logTime')
         },
         {
             title: 'User Name',
             dataIndex: 'username',
-            width: '10%',
+            width: '15%',
             ...getColumnSearchProps('username')
         },
         {
@@ -86,14 +88,14 @@ function LogContent() {
         {
             title: 'Log Content',
             dataIndex: 'logContent',
-            width: '65%',
+            width: '55%',
             render: (_, elm) => (
                 elm.action === 'create' ?
-                <span><b>Created a new row</b> {elm.logContent}</span>
+                <span><b>Created a new row</b> {elm.newContent}</span>
                 : elm.action === 'update' ?
-                <span><b>Updated a row from</b> {elm.logContent} <b>to</b> {elm.updateContent}</span>
+                <span><b>Updated a row from</b> {elm.oldContent} <b>to</b> {elm.newContent}</span>
                 : elm.action === 'delete' ?
-                <span><b>Deleted a row</b> {elm.logContent}</span>
+                <span><b>Deleted a row</b> {elm.oldContent}</span>
                 : null
             ),
         }

@@ -53,7 +53,8 @@ class LoginComponent extends React.Component {
                     }
                 },
                     (error) => {
-                        notification.warning({
+                        console.log(error);
+                        notification.error({
                             message: 'Log In Error',
                             description: 'Server has got some problems.',
                             placement: 'topRight'
@@ -96,7 +97,8 @@ class LoginComponent extends React.Component {
                     }
                 },
                     (error) => {
-                        notification.warning({
+                        console.log(error);
+                        notification.error({
                             message: 'Sign Up Error',
                             description: 'Server has got some problem.',
                             placement: 'topRight'

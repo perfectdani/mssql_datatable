@@ -27,7 +27,20 @@
                 "repo": "mssql_datatable_front",
                 "token": "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"
             }
-        ]
+        ],
+        "win": {
+            "icon": "./public/favicon.png"
+        },
+        "files": [
+            "./build/**/*",
+            "./dist/**/*",
+            "./node_modules/**/*",
+            "./public/**/*",
+            "*.js"
+        ],
+        "directories": {
+            "buildResources": "public"
+        }
     },
     "devDependencies": {
         "concurrently": "^6.4.0",

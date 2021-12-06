@@ -35,21 +35,23 @@ const Content = (props) => {
 
     const getContent = () => {
         setIsLoading(true);
-        fetch(`${process.env.REACT_APP_API}/getContent`, {
+        fetch(`${process.env.REACT_APP_API}/get-content`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ table: props.nowTab })
         }).then(res => res.json()).then((result) => {
-            setContent(result.data);
-            let arr = {};
-            for (const key in result.data[0]) {
-                if (key !== 'Id') {
-                    arr[key] = '';
+            if (result.message === 'success') {
+                setContent(result.data);
+                let arr = {};
+                for (const key in result.data[0]) {
+                    if (key !== 'id') {
+                        arr[key] = '';
+                    }
                 }
+                arr['id'] = 0;
+                setHeader(arr);
+                setIsLoading(false);
             }
-            arr['Id'] = 0;
-            setHeader(arr);
-            setIsLoading(false);
         });
     }
 
@@ -67,7 +69,7 @@ const Content = (props) => {
                 data[dom[i].name] = dom[i].value;
             }
         }
-        fetch(`${process.env.REACT_APP_API}/createRow`, {
+        fetch(`${process.env.REACT_APP_API}/create-row`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -76,7 +78,7 @@ const Content = (props) => {
                 data: data
             })
         }).then(res => res.json()).then((result) => {
-            if (result.message === 'Success') {
+            if (result.message === 'success') {
                 getContent();
                 setInsertFlag(false);
             }
@@ -86,28 +88,12 @@ const Content = (props) => {
     const createCancel = () => {
         let arr = [];
         content.map((item) => {
-            if (item.Id) {
+            if (item.id) {
                 arr = [...arr, item];
             }
         })
         setContent(arr);
         setInsertFlag(false);
-    }
-
-    const deleteRow = (id) => {
-        fetch(`${process.env.REACT_APP_API}/deleteRow`, {
-            method: 'DELETE',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                user: localStorage.getItem('user'),
-                table: props.nowTab,
-                id: id
-            })
-        }).then(res => res.json()).then((result) => {
-            if (result.message === 'Success') {
-                getContent();
-            }
-        });
     }
 
     const editRow = (id) => {
@@ -122,17 +108,17 @@ const Content = (props) => {
                 data[dom[i].name] = dom[i].value;
             }
         }
-        fetch(`${process.env.REACT_APP_API}/updateRow`, {
+        fetch(`${process.env.REACT_APP_API}/update-row`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 user: localStorage.getItem('user'),
                 table: props.nowTab,
-                editId: editId,
+                id: editId,
                 data: data
             })
         }).then(res => res.json()).then((result) => {
-            if (result.message === 'Success') {
+            if (result.message === 'success') {
                 getContent();
                 setEditId(null);
             }
@@ -141,6 +127,22 @@ const Content = (props) => {
 
     const updateCancel = () => {
         setEditId(null);
+    }
+
+    const deleteRow = (id) => {
+        fetch(`${process.env.REACT_APP_API}/delete-row`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                user: localStorage.getItem('user'),
+                table: props.nowTab,
+                id: id
+            })
+        }).then(res => res.json()).then((result) => {
+            if (result.message === 'success') {
+                getContent();
+            }
+        });
     }
 
     const handleSearch = (selectedKeys, confirm, dataIndex) => {
@@ -215,9 +217,9 @@ const Content = (props) => {
                 ? record[dataIndex].toString().toLowerCase().includes(value.toLowerCase())
                 : '',
         render: (_, elm) => (
-            elm.Id ?
-                elm.Id === editId ?
-                    <Input type="text" name={dataIndex} defaultValue={elm[dataIndex]} style={{ textAlign: 'center' }} />
+            elm.id ?
+                elm.id === editId ?
+                    <Input type="text" className="row-input" name={dataIndex} defaultValue={elm[dataIndex]}/>
                     : searchedColumn === dataIndex ? (
                         <Highlighter
                             highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -228,7 +230,7 @@ const Content = (props) => {
                     ) : (
                         elm[dataIndex]
                     )
-                : <Input type="text" name={dataIndex} style={{ textAlign: 'center' }} />
+                : <Input type="text" className="row-input" name={dataIndex}/>
         ),
         /* eslint-enable */
     });
@@ -244,7 +246,7 @@ const Content = (props) => {
         if (content) {
             let arr = [];
             for (const key in content[0]) {
-                if (key !== 'Id') {
+                if (key !== 'id') {
                     arr = [...arr, {
                         title: key,
                         dataIndex: key,
@@ -263,20 +265,20 @@ const Content = (props) => {
                 width: 100,
                 /* eslint-disable */
                 render: (_, elm) => (
-                    elm.Id ?
+                    elm.id ?
                         <Space>
                             {
-                                elm.Id == editId ?
+                                elm.id == editId ?
                                     <Space>
                                         <Button type="text" size="small" style={{ color: blue.primary }} icon={<CheckOutlined />} onClick={updateRow} />
                                         <Button danger type="text" size="small" icon={<CloseOutlined />} onClick={updateCancel} />
                                     </Space>
                                     : <Space>
-                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<EditOutlined />} onClick={() => { editRow(elm.Id) }} />
+                                        <Button type="text" size="small" style={{ color: blue.primary }} icon={<EditOutlined />} onClick={() => { editRow(elm.id) }} />
                                         <Popconfirm
                                             placement="left"
                                             title="Are you deleting this row?"
-                                            onConfirm={() => { deleteRow(elm.Id, content) }}
+                                            onConfirm={() => { deleteRow(elm.id, content) }}
                                             okText="Yes"
                                             cancelText="No"
                                         >
@@ -311,7 +313,7 @@ const Content = (props) => {
             }
             <Table
                 bordered
-                rowKey="Id"
+                rowKey="id"
                 columns={columns}
                 dataSource={content}
                 loading={isLoading}

@@ -16,7 +16,7 @@ function createWindow() {
     mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
-        icon: path.join(__dirname, 'logo.png'),
+        icon: path.join(__dirname, 'favicon.png'),
         webPreferences: {
             nodeIntegration: true
         }

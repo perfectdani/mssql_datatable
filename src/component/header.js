@@ -14,13 +14,13 @@ const Header = () => {
     }
 
     const viewLog = () => {
-        history.push('/log');
+        history.push('/view-log');
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
     }
 
     const changePassword = () => {
-        history.push('/password');
+        history.push('/change-password');
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
     }
@@ -40,41 +40,31 @@ const Header = () => {
             <img src="logo.png" alt="logo" width="100" />
             <p className="header-text">Hello, {localStorage.getItem('user')} !!!</p>
             <Space>
-                {
-                    window.location.href.split("/")[window.location.href.split("/").length-1] !== '' ?
-                        <Button
-                            type="text"
-                            style={{ color: '#0044aa', fontWeight: 'bold' }}
-                            onClick={goHome}
-                        >
-                            Home
-                        </Button>
-                        : null
-                }
+                <Button
+                    type="text"
+                    style={{ color: '#0044aa', fontWeight: 'bold' }}
+                    onClick={goHome}
+                >
+                    Home
+                </Button>
                 {
                     localStorage.getItem('admin') === 'true' ?
-                        window.location.href.split("/")[window.location.href.split("/").length-1] !== 'log' ?
-                            <Button
-                                type="text"
-                                style={{ color: '#0044aa', fontWeight: 'bold' }}
-                                onClick={viewLog}
-                            >
-                                View Log
-                            </Button>
-                            : null
-                        : null
-                }
-                {
-                    window.location.href.split("/")[window.location.href.split("/").length-1] !== 'password' ?
                         <Button
                             type="text"
                             style={{ color: '#0044aa', fontWeight: 'bold' }}
-                            onClick={changePassword}
+                            onClick={viewLog}
                         >
-                            Change password
+                            View Log
                         </Button>
                         : null
                 }
+                <Button
+                    type="text"
+                    style={{ color: '#0044aa', fontWeight: 'bold' }}
+                    onClick={changePassword}
+                >
+                    Change password
+                </Button>
                 <Button
                     type="text"
                     style={{ color: '#0044aa', fontWeight: 'bold' }}

@@ -1,11 +1,15 @@
 import React from 'react';
+import { notification } from 'antd';
+import { createBrowserHistory, createHashHistory } from 'history';
+import { isElectron } from '../utils';
 
 const Tab = (props) => {
 
+    const history = isElectron() ? createHashHistory() : createBrowserHistory();
     const [tabList, setTabList] = React.useState(null);
 
     React.useEffect(() => {
-        fetch(`${process.env.REACT_APP_API}/getTables`)
+        fetch(`${process.env.REACT_APP_API}/get-table-list`)
             .then(res => res.json()).then((result) => {
                 let arr = result.data.map((item)=>item.TABLE_NAME)
                 setTabList(arr);
@@ -13,6 +17,16 @@ const Tab = (props) => {
             },
             (error) => {
                 console.log(error);
+                notification.error({
+                    message: "Connect Error",
+                    description: "Server has got some problems.",
+                    placement: "topRight"
+                });
+                localStorage.removeItem('user');
+                localStorage.removeItem('admin');
+                history.push('/login');
+                let pathUrl = window.location.href;
+                window.location.href = pathUrl;
             }
         );
     },[]);

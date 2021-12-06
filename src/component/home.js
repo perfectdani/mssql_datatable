@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
+import { createBrowserHistory, createHashHistory } from 'history';
+import { isElectron } from '../utils';
 import Tab from './tab';
 import Content from './content';
 import Header from './header';
-import { createBrowserHistory, createHashHistory } from 'history';
-import { isElectron } from '../utils';
 import '../style/home.css';
 
 function Home() {
