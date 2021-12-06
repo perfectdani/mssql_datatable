@@ -6,13 +6,13 @@ import { isElectron } from '../utils';
 const Header = () => {
 
     const history = isElectron() ? createHashHistory() : createBrowserHistory();
-    
-        const goHome = () => {
-            history.push('/');
-            let pathUrl = window.location.href;
-            window.location.href = pathUrl;
-        }
-    
+
+    const goHome = () => {
+        history.push('/');
+        let pathUrl = window.location.href;
+        window.location.href = pathUrl;
+    }
+
     const viewLog = () => {
         history.push('/log');
         let pathUrl = window.location.href;
@@ -33,13 +33,15 @@ const Header = () => {
         window.location.href = pathUrl;
     }
 
+    console.log(window.location.href);
+
     return (
         <div className="header">
             <img src="logo.png" alt="logo" width="100" />
             <p className="header-text">Hello, {localStorage.getItem('user')} !!!</p>
             <Space>
                 {
-                    window.location.href !== 'http://localhost:3000/' ?
+                    window.location.href.split("/")[window.location.href.split("/").length-1] !== '' ?
                         <Button
                             type="text"
                             style={{ color: '#0044aa', fontWeight: 'bold' }}
@@ -51,7 +53,7 @@ const Header = () => {
                 }
                 {
                     localStorage.getItem('admin') === 'true' ?
-                        window.location.href !== 'http://localhost:3000/log' ?
+                        window.location.href.split("/")[window.location.href.split("/").length-1] !== 'log' ?
                             <Button
                                 type="text"
                                 style={{ color: '#0044aa', fontWeight: 'bold' }}
@@ -63,7 +65,7 @@ const Header = () => {
                         : null
                 }
                 {
-                    window.location.href !== 'http://localhost:3000/password' ?
+                    window.location.href.split("/")[window.location.href.split("/").length-1] !== 'password' ?
                         <Button
                             type="text"
                             style={{ color: '#0044aa', fontWeight: 'bold' }}
