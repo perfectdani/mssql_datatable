@@ -52,7 +52,7 @@ function PasswordForm() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             style={{
-                padding: '50px 20px'
+                padding: '75px 20px 50px 20px'
             }}
         >
             <Form.Item
