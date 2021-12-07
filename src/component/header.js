@@ -1,14 +1,28 @@
 import React from 'react';
 import { Button, Space } from 'antd';
+import { LogoutOutlined, UnlockOutlined, HistoryOutlined, UserOutlined, HomeOutlined } from '@ant-design/icons';
 import { createBrowserHistory, createHashHistory } from 'history';
 import { isElectron } from '../utils';
 
 const Header = () => {
 
     const history = isElectron() ? createHashHistory() : createBrowserHistory();
+    const [browserWidth, setBrowserWidth] = React.useState(window.innerWidth);
+
+    const handleResize = () => {
+        setBrowserWidth(window.innerWidth);
+    }
+    
+    window.addEventListener("resize", handleResize);
 
     const goHome = () => {
         history.push('/');
+        let pathUrl = window.location.href;
+        window.location.href = pathUrl;
+    }
+
+    const userManage = () => {
+        history.push('/users');
         let pathUrl = window.location.href;
         window.location.href = pathUrl;
     }
@@ -33,45 +47,73 @@ const Header = () => {
         window.location.href = pathUrl;
     }
 
-    console.log(window.location.href);
-
     return (
         <div className="header">
-            <img src="logo.png" alt="logo" width="100" />
-            <p className="header-text">Hello, {localStorage.getItem('user')} !!!</p>
-            <Space>
-                <Button
-                    type="text"
-                    style={{ color: '#0044aa', fontWeight: 'bold' }}
-                    onClick={goHome}
-                >
-                    Home
-                </Button>
+            <a href="/">
+                <img src="logo.png" alt="logo" width="100" style={{ marginRight: '20px' }} />
+            </a>
+            {
+                browserWidth > 1200 &&
+                <p className="header-text">Hello, {localStorage.getItem('user')} !</p>
+            }
+            <Space wrap style={{ justifyContent: 'center' }}>
                 {
-                    localStorage.getItem('admin') === 'true' ?
+                    browserWidth < 1201 && browserWidth > 965 ?
+                    <p className="header-text" style={{ margin: '0 43px' }}>Hello, {localStorage.getItem('user')} !</p>
+                    : null
+                }
+                <Space wrap style={{ justifyContent: 'center' }}>
+                    <Space>
                         <Button
                             type="text"
+                            icon={<HomeOutlined />}
                             style={{ color: '#0044aa', fontWeight: 'bold' }}
-                            onClick={viewLog}
+                            onClick={goHome}
                         >
-                            View Log
+                            Home
                         </Button>
-                        : null
-                }
-                <Button
-                    type="text"
-                    style={{ color: '#0044aa', fontWeight: 'bold' }}
-                    onClick={changePassword}
-                >
-                    Change password
-                </Button>
-                <Button
-                    type="text"
-                    style={{ color: '#0044aa', fontWeight: 'bold' }}
-                    onClick={logout}
-                >
-                    Log Out
-                </Button>
+                        {
+                            localStorage.getItem('admin') === 'true' ?
+                                <React.Fragment>
+                                    <Button
+                                        type="text"
+                                        icon={<UserOutlined />}
+                                        style={{ color: '#0044aa', fontWeight: 'bold' }}
+                                        onClick={userManage}
+                                    >
+                                        User Manage
+                                    </Button>
+                                    <Button
+                                        type="text"
+                                        icon={<HistoryOutlined />}
+                                        style={{ color: '#0044aa', fontWeight: 'bold' }}
+                                        onClick={viewLog}
+                                    >
+                                        View Log
+                                    </Button>
+                                </React.Fragment>
+                                : null
+                        }
+                    </Space>
+                    <Space>
+                        <Button
+                            type="text"
+                            icon={<UnlockOutlined />}
+                            style={{ color: '#0044aa', fontWeight: 'bold' }}
+                            onClick={changePassword}
+                        >
+                            Change password
+                        </Button>
+                        <Button
+                            type="text"
+                            icon={<LogoutOutlined />}
+                            style={{ color: '#0044aa', fontWeight: 'bold' }}
+                            onClick={logout}
+                        >
+                            Log Out
+                        </Button>
+                    </Space>
+                </Space>
             </Space>
         </div>
     );

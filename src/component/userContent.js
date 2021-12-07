@@ -1,28 +1,57 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { Table, Space, Button, Input } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Table, Space, Button, Input, Popconfirm } from 'antd';
+import { SearchOutlined, DeleteOutlined } from '@ant-design/icons';
 
-function LogContent() {
+function UserContent() {
 
     const [isLoading, setIsLoading] = React.useState(false);
-    const [logData, setLogData] = React.useState([]);
-    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight-260);
+    const [userData, setUserData] = React.useState([]);
+    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight - 260);
     const [pagination, setPagenation] = React.useState({
         current: 1,
         pageSize: 10,
         position: ['bottomCenter', 'none']
     });
 
-    React.useEffect(() => {
+    const getUsers = () => {
         setIsLoading(true);
-        fetch(`${process.env.REACT_APP_API}/view-log`).then(res => res.json()).then((result) => {
+        fetch(`${process.env.REACT_APP_API}/get-users`).then(res => res.json()).then((result) => {
             if (result.message === 'success') {
-                setLogData(result.data);
+                setUserData(result.data);
                 setIsLoading(false);
             }
         });
+    }
+
+    const deleteUser = (id) => {
+        setIsLoading(true);
+        fetch(`${process.env.REACT_APP_API}/delete-user`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id })
+        }).then(res => res.json()).then((result) => {
+            if (result.message === 'success') {
+                getUsers();
+            }
+        });
+    }
+
+    React.useEffect(() => {
+        getUsers();
     }, []);
+
+    const tableSorter = (a, b, key) => {
+        if (typeof a[key] === 'number' && typeof b[key] === 'number') {
+            return a[key] - b[key];
+        }
+        if (typeof a[key] === 'string' && typeof b[key] === 'string') {
+            a = a[key].toLowerCase();
+            b = b[key].toLowerCase();
+            return a > b ? -1 : b > a ? 1 : 0;
+        }
+        return 0;
+    }
 
     const getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
@@ -68,43 +97,41 @@ function LogContent() {
 
     const columns = [
         {
-            title: 'Log Time',
-            dataIndex: 'logTime',
-            width: '15%',
-            ...getColumnSearchProps('logTime')
-        },
-        {
+            key: 'username',
             title: 'User Name',
             dataIndex: 'username',
-            width: '15%',
+            sorter: (a, b) => tableSorter(a, b, 'username'),
             ...getColumnSearchProps('username')
         },
         {
-            title: 'Table Name',
-            dataIndex: 'tablename',
-            width: '20%',
-            ...getColumnSearchProps('tablename')
+            key: 'email',
+            title: 'Email',
+            dataIndex: 'email',
+            sorter: (a, b) => tableSorter(a, b, 'email'),
+            ...getColumnSearchProps('email')
         },
         {
-            title: 'Log Content',
-            dataIndex: 'logContent',
-            width: '50%',
+            key: 'action',
+            title: 'Action',
+            dataIndex: 'action',
             render: (_, elm) => (
-                elm.action === 'create' ?
-                <span><b>Created a new row</b> {elm.newContent}</span>
-                : elm.action === 'update' ?
-                <span><b>Updated a row from</b> {elm.oldContent} <b>to</b> {elm.newContent}</span>
-                : elm.action === 'delete' ?
-                <span><b>Deleted a row</b> {elm.oldContent}</span>
-                : null
-            ),
+                <Popconfirm
+                    placement="left"
+                    title="Are you deleting this row?"
+                    onConfirm={() => { deleteUser(elm.id) }}
+                    okText="Yes"
+                    cancelText="No"
+                >
+                    <Button type="text" danger size="small" icon={<DeleteOutlined />}>Delete</Button>
+                </Popconfirm>
+            )
         }
     ]
 
     const handleResize = () => {
-        setTableHeight(window.innerHeight-260);
+        setTableHeight(window.innerHeight - 260);
     }
-    
+
     window.addEventListener("resize", handleResize);
 
     const handleTableChange = (pagination) => {
@@ -114,10 +141,11 @@ function LogContent() {
     return (
         <React.Fragment>
             <Table
+                className="user-table"
                 bordered
                 rowKey="id"
                 columns={columns}
-                dataSource={logData}
+                dataSource={userData}
                 loading={isLoading}
                 pagination={pagination}
                 onChange={handleTableChange}
@@ -127,4 +155,4 @@ function LogContent() {
     );
 }
 
-export default LogContent;
+export default UserContent;

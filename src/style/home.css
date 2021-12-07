@@ -42,9 +42,21 @@ body {
     font-weight     : bold;
 }
 
-.ant-table-wrapper {
+.ant-table-wrapper, .ant-form {
     background-color: white;
-    box-shadow      : 2px 4px 8px rgb(0 0 0 20%);
+    box-shadow      : 2px 4px 8px lightgray;
+}
+
+.user-table .ant-table-column-title {
+    text-align: center;
+}
+
+.user-table .ant-table-cell {
+    text-align: center;
+}
+
+.user-table td {
+    text-align: center;
 }
 
 .ant-table-tbody>tr.ant-table-row-level-0:hover>td {

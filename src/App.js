@@ -7,6 +7,7 @@ import Home from './component/home';
 import Log from './component/log';
 import Password from './component/password';
 import Login from './component/login';
+import Users from './component/users';
 
 function App() {
 
@@ -34,6 +35,9 @@ function App() {
                 <Switch>
                     <Route path='/' exact>
                         <Home />
+                    </Route>
+                    <Route path='/users' exact>
+                        <Users />
                     </Route>
                     <Route path='/view-log' exact>
                         <Log />

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { Form, Input, Button, notification } from 'antd';
+import { Form, Input, Button, notification, Popconfirm } from 'antd';
 
 function PasswordForm() {
 
@@ -16,7 +16,7 @@ function PasswordForm() {
         }
         else {
             fetch(`${process.env.REACT_APP_API}/change-password`, {
-                method: 'POST',
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({...values, user: localStorage.getItem('user')})
             }).then(res => res.json()).then((result) => {
@@ -45,15 +45,14 @@ function PasswordForm() {
     return (
         <Form
             form={form}
-            name="basic"
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 8 }}
+            labelCol={{ span: 9 }}
+            wrapperCol={{ span: 9 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             style={{
-                paddingTop: '50px'
+                padding: '50px 20px'
             }}
         >
             <Form.Item
@@ -61,7 +60,7 @@ function PasswordForm() {
                 name="oldPassword"
                 rules={[{ required: true, message: 'Please input your old password!' }]}
             >
-                <Input.Password />
+                <Input.Password size='large' />
             </Form.Item>
 
             <Form.Item
@@ -69,7 +68,7 @@ function PasswordForm() {
                 name="newPassword"
                 rules={[{ required: true, message: 'Please input your new password!' }]}
             >
-                <Input.Password />
+                <Input.Password size='large' />
             </Form.Item>
 
             <Form.Item
@@ -77,10 +76,10 @@ function PasswordForm() {
                 name="confirmPassword"
                 rules={[{ required: true, message: 'Please input your confirm password!' }]}
             >
-                <Input.Password />
+                <Input.Password size='large' />
             </Form.Item>
 
-            <Form.Item wrapperCol={{ offset: 8, span: 8 }}>
+            <Form.Item wrapperCol={{ offset: 9, span: 9 }}>
                 <Button type="primary" htmlType="submit">
                     Submit
                 </Button>
