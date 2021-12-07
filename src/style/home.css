@@ -10,12 +10,20 @@ body {
 
 .header {
     display        : flex;
-    justify-content: space-between;
-    align-items    : center;
     padding        : 12px 42px;
 }
 
+.header-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: calc(100% - 120px);
+    align-items: flex-end;
+}
+
 .header-text {
+    width: 100%;
+    text-align: center;
     color        : #1890ff;
     font-weight  : bold;
     font-size    : 24px;

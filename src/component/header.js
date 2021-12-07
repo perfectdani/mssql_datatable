@@ -12,7 +12,7 @@ const Header = () => {
     const handleResize = () => {
         setBrowserWidth(window.innerWidth);
     }
-    
+
     window.addEventListener("resize", handleResize);
 
     const goHome = () => {
@@ -49,18 +49,13 @@ const Header = () => {
 
     return (
         <div className="header">
-            <a href="/">
+            <a onClick={goHome}>
                 <img src="logo.png" alt="logo" width="100" style={{ marginRight: '20px' }} />
             </a>
-            {
-                browserWidth > 1200 &&
-                <p className="header-text">Hello, {localStorage.getItem('user')} !</p>
-            }
-            <Space wrap style={{ justifyContent: 'center' }}>
+            <div className="header-content">
                 {
-                    browserWidth < 1201 && browserWidth > 965 ?
-                    <p className="header-text" style={{ margin: '0 43px' }}>Hello, {localStorage.getItem('user')} !</p>
-                    : null
+                    browserWidth > 961 &&
+                    <p className="header-text" >Hello, {localStorage.getItem('user')} !</p>
                 }
                 <Space wrap style={{ justifyContent: 'center' }}>
                     <Space>
@@ -114,10 +109,10 @@ const Header = () => {
                         </Button>
                     </Space>
                 </Space>
-            </Space>
+            </div>
         </div>
     );
 
 };
-
+ 
 export default Header;
