@@ -1,13 +1,13 @@
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import { Table, Space, Popconfirm, Button, Input } from 'antd';
-import { SearchOutlined, EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import { Table, Space, Popconfirm, Button, Input, Form, Switch, Modal } from 'antd';
+import { SearchOutlined, EditOutlined, DeleteOutlined, PlusOutlined, CheckOutlined, CloseOutlined, RetweetOutlined } from '@ant-design/icons';
 import { blue } from '@ant-design/colors';
 
 const Content = (props) => {
 
     const [tableWidth, setTableWidth] = React.useState(null);
-    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight-313);
+    const [talbleHeight, setTableHeight] = React.useState(window.innerHeight - 313);
     const [insertFlag, setInsertFlag] = React.useState(false);
     const [editId, setEditId] = React.useState(null);
     const [content, setContent] = React.useState(null);
@@ -23,6 +23,44 @@ const Content = (props) => {
     const [sortedInfo, setSortedInfo] = React.useState({});
     const [searchText, setSearchText] = React.useState('');
     const [searchedColumn, setSearchedColumn] = React.useState('');
+    const [visibleModal, setVisibleModal] = React.useState(false);
+    const [form] = Form.useForm();
+
+    const replaceModalShow = () => {
+        form.resetFields(); 
+        form.setFieldsValue({
+            matchCase: false,
+            matchEntire: false
+        });
+        setVisibleModal(true);
+    }
+
+    const replaceModalHidden = () => {
+        setVisibleModal(false);
+    }
+
+    const runReplace = () => {
+        form.submit();
+    }
+
+    const onFinish = (values) => {
+        replaceModalHidden();
+        setIsLoading(true);
+        fetch(`${process.env.REACT_APP_API}/replace`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ...values, user: localStorage.getItem('user'), table: props.nowTab })
+        }).then(res => res.json()).then((result) => {
+            if (result.message === 'success') {
+                setContent(result.data);
+                setIsLoading(false);
+            }
+        });
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
 
     const allReset = () => {
         setPagenation({ ...pagination, current: 1 });
@@ -219,7 +257,7 @@ const Content = (props) => {
         render: (_, elm) => (
             elm.id ?
                 elm.id === editId ?
-                    <Input type="text" className="row-input" name={dataIndex} defaultValue={elm[dataIndex]}/>
+                    <Input type="text" className="row-input" name={dataIndex} defaultValue={elm[dataIndex]} />
                     : searchedColumn === dataIndex ? (
                         <Highlighter
                             highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -230,7 +268,7 @@ const Content = (props) => {
                     ) : (
                         elm[dataIndex]
                     )
-                : <Input type="text" className="row-input" name={dataIndex}/>
+                : <Input type="text" className="row-input" name={dataIndex} />
         ),
         /* eslint-enable */
     });
@@ -295,22 +333,68 @@ const Content = (props) => {
                 /* eslint-enable */
             }];
             setColumns(arr);
-            setTableWidth(arr.length*150);
+            setTableWidth(arr.length * 150);
         }
     }, [content, sortedInfo, filteredInfo, editId]);
-    
+
     const handleResize = () => {
-        setTableHeight(window.innerHeight-313);
+        setTableHeight(window.innerHeight - 313);
     }
-    
+
     window.addEventListener("resize", handleResize);
 
     return (
         <React.Fragment>
             {
                 props.nowTab &&
-                <Button type="primary" className="insert" disabled={insertFlag} onClick={insertRow} icon={<PlusOutlined />}>New</Button>
+                <React.Fragment>
+                    <Button type="primary" className="replace" disabled={isLoading} onClick={replaceModalShow} icon={<RetweetOutlined />}>Replace</Button>
+                    <Button type="primary" className="insert" disabled={insertFlag || isLoading} onClick={insertRow} icon={<PlusOutlined />}>New</Button>
+                </React.Fragment>
             }
+            <Modal
+                title="Find and Replace"
+                centered
+                visible={visibleModal}
+                onOk={runReplace}
+                onCancel={replaceModalHidden}
+            >
+                <Form
+                    form={form}
+                    onFinish={onFinish}
+                    onFinishFailed={onFinishFailed}
+                    labelCol={{ span: 10 }}
+                    wrapperCol={{ span: 10 }}
+                    initialValues={{ remember: true }}
+                >
+                    <Form.Item
+                        name="findWord"
+                        label="Find what"
+                        rules={[{ required: true, message: 'Missing area' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="replaceWord"
+                        label="Replace with"
+                        rules={[{ required: true, message: 'Missing area' }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        name="matchCase"
+                        label="Match Case"
+                    >
+                        <Switch />
+                    </Form.Item>
+                    <Form.Item
+                        name="matchEntire"
+                        label="Match entire cell contents"
+                    >
+                        <Switch />
+                    </Form.Item>
+                </Form>
+            </Modal>
             <Table
                 bordered
                 rowKey="id"

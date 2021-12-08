@@ -96,7 +96,9 @@ function LogContent() {
                 <span><b>Updated a row from</b> {elm.oldContent} <b>to</b> {elm.newContent}</span>
                 : elm.action === 'delete' ?
                 <span><b>Deleted a row</b> {elm.oldContent}</span>
-                : null
+                : elm.action === 'replace' ?
+                <span><b>Replaced</b> "{elm.oldContent}" <b>to</b> "{elm.newContent}"</span>
+                :null
             ),
         }
     ]

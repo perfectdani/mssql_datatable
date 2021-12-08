@@ -18,9 +18,9 @@ function PasswordForm() {
             fetch(`${process.env.REACT_APP_API}/change-password`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({...values, user: localStorage.getItem('user')})
+                body: JSON.stringify({ ...values, user: localStorage.getItem('user') })
             }).then(res => res.json()).then((result) => {
-                if(result.message === 'Change Success') {
+                if (result.message === 'Change Success') {
                     notification.info({
                         message: result.message,
                         description: result.description,
@@ -52,7 +52,9 @@ function PasswordForm() {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
             style={{
-                padding: '75px 20px 50px 20px'
+                padding: '75px 20px 50px 20px',
+                backgroundColor: 'white',
+                boxShadow: '2px 4px 8px lightgray'
             }}
         >
             <Form.Item

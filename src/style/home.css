@@ -50,7 +50,7 @@ body {
     font-weight     : bold;
 }
 
-.ant-table-wrapper, .ant-form {
+.ant-table-wrapper {
     background-color: white;
     box-shadow      : 2px 4px 8px lightgray;
 }
@@ -77,6 +77,13 @@ body {
 
 .ant-pagination {
     padding-left: 42px;
+}
+
+.replace {
+    position: fixed;
+    top     : 186px;
+    right   : 184px;
+    z-index : 100;
 }
 
 .insert {
