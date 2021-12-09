@@ -72,7 +72,12 @@ body {
 }
 
 .row-input {
+    width: 117px;
     border-color: #1890ff;
+}
+
+.row-input:focus-visible {
+    outline: none;
 }
 
 .ant-pagination {

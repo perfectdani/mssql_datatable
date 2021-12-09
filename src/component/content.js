@@ -99,6 +99,21 @@ const Content = (props) => {
         setInsertFlag(true);
     }
 
+    const handlePaste = (e) => {
+        let data = e.clipboardData.getData('text/plain').split('\t');
+        if (data.length>1) {
+            e.preventDefault();
+            let j = 0;
+            const dom = document.getElementsByTagName('input');
+            for (let i = 0; i < dom.length; i++) {
+                if (dom[i].name) {
+                    dom[i].value = data[j];
+                    j += 1;
+                }
+            }
+        }
+    }
+
     const createRow = () => {
         let data = {};
         const dom = document.getElementsByTagName('input');
@@ -257,7 +272,7 @@ const Content = (props) => {
         render: (_, elm) => (
             elm.id ?
                 elm.id === editId ?
-                    <Input type="text" className="row-input" name={dataIndex} defaultValue={elm[dataIndex]} />
+                    <input type="text" className="row-input" name={dataIndex} defaultValue={elm[dataIndex]} />
                     : searchedColumn === dataIndex ? (
                         <Highlighter
                             highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -268,7 +283,7 @@ const Content = (props) => {
                     ) : (
                         elm[dataIndex]
                     )
-                : <Input type="text" className="row-input" name={dataIndex} />
+                : <input type="text" className="row-input" name={dataIndex} onPaste={handlePaste} />
         ),
         /* eslint-enable */
     });
