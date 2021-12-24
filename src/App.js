@@ -4,7 +4,6 @@ import { notification } from 'antd';
 import { createBrowserHistory, createHashHistory } from 'history';
 import { isElectron } from './utils';
 import Home from './component/home';
-import Log from './component/log';
 import Password from './component/password';
 import Login from './component/login';
 import Users from './component/users';
@@ -38,9 +37,6 @@ function App() {
                     </Route>
                     <Route path='/users' exact>
                         <Users />
-                    </Route>
-                    <Route path='/view-log' exact>
-                        <Log />
                     </Route>
                     <Route path='/change-password' exact>
                         <Password />

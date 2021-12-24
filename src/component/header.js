@@ -27,12 +27,6 @@ const Header = () => {
         window.location.href = pathUrl;
     }
 
-    const viewLog = () => {
-        history.push('/view-log');
-        let pathUrl = window.location.href;
-        window.location.href = pathUrl;
-    }
-
     const changePassword = () => {
         history.push('/change-password');
         let pathUrl = window.location.href;
@@ -77,14 +71,6 @@ const Header = () => {
                                         onClick={userManage}
                                     >
                                         User Manage
-                                    </Button>
-                                    <Button
-                                        type="text"
-                                        icon={<HistoryOutlined />}
-                                        style={{ color: '#0044aa', fontWeight: 'bold' }}
-                                        onClick={viewLog}
-                                    >
-                                        View Log
                                     </Button>
                                 </React.Fragment>
                                 : null
