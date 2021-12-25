@@ -52,8 +52,8 @@ const Content = (props) => {
                 if (result.message === 'success') {
                     let activeRowIndex = ssRef.current.getActiveSheet().usedRange.rowIndex;
                     let activeColIndex = ssRef.current.getActiveSheet().usedRange.colIndex;
+                    let colSTR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                     if (activeRowIndex) {
-                        let colSTR = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
                         let colID;
                         if (activeColIndex < 26) {
                             colID = colSTR[activeColIndex];
@@ -66,6 +66,16 @@ const Content = (props) => {
                         ssRef.current.selectRange(getRangeAddress([1, 0, 1, 0]));
                     }
                     setData(result.data);
+                    let newCols = Object.keys(result.data[0]).length;
+                    let nweColID;
+                    if (newCols < 26) {
+                        nweColID = colSTR[newCols];
+                    } else {
+                        let c = parseInt(newCols / 26);
+                        let d = (newCols % 26);
+                        nweColID = `${colSTR[c - 1]}${colSTR[d]}`;
+                    }
+                    ssRef.current.cellFormat({ fontWeight: 'bold', textAlign:'center' }, `A1:${nweColID}1`);
                     ssRef.current.hideSpinner();
                 }
             });
@@ -81,7 +91,7 @@ const Content = (props) => {
                 <SheetsDirective>
                     <SheetDirective frozenRows={1}>
                         <RangesDirective>
-                            <RangeDirective dataSource={data} />
+                            <RangeDirective dataSource={data} showFieldAsHeader={true} />
                         </RangesDirective>
                     </SheetDirective>
                 </SheetsDirective>
